@@ -4,7 +4,7 @@ const EventEmitter = require("events");
  * DMX
  * @param {Object} options - Configuration options.
  * @param {Object} options.devices - Custom device definitions.
- * @param {Object} options.altBindings - Custom bindings passed through for SerialPort.
+ * @param {any} options.altBindings - Custom bindings passed through for SerialPort.
  * @constructor
  * @emits update
  * @emits updateAll
