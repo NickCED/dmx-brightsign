@@ -1,4 +1,4 @@
-const SerialPort = require("serialport");
+const { SerialPortStream } = require("@serialport/stream");
 const util = require("util");
 const EventEmitter = require("events").EventEmitter;
 
@@ -20,14 +20,14 @@ function EnttecUSBDMXPRO(deviceId, options = {}) {
   this.readyToWrite = true;
   this.interval = 1000 / (options.dmx_speed || 40);
 
-  this.dev = new SerialPort(
+  this.dev = new SerialPortStream(
     {
       path: deviceId,
       baudRate: 250000,
       dataBits: 8,
       stopBits: 2,
       parity: "none",
-      ...(options.altBindings && { bindings: options.altBindings }),
+      binding: options.altBindings,
     },
     (err) => {
       if (!err) {
