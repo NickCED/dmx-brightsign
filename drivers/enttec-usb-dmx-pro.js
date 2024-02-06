@@ -1,4 +1,4 @@
-const SerialPort = require("@serialport/stream");
+const SerialPort = require("serialport");
 const util = require("util");
 const EventEmitter = require("events").EventEmitter;
 
@@ -12,7 +12,7 @@ const ENTTEC_PRO_SEND_DMX_RQ = 0x06;
  * Creates an instance of EnttecUSBDMXPRO.
  * @param {string} deviceId - The device ID for the DMX USB Pro device.
  * @param {Object} options - Configuration options.
- * @param {AltBindings} [options.altBindings] - Alternative bindings for SerialPort.
+ * @param {AltBindings} options.altBindings - Alternative bindings for SerialPort.
  */
 
 function EnttecUSBDMXPRO(deviceId, options = {}) {
