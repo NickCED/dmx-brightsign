@@ -1,14 +1,15 @@
 # node-dmx
 
-DMX-512 controller library for node.js
+DMX-512 controller library for node.js modified for use on Brightsign units
 
 ## Install
 
-    npm install dmx
+    npm install github:NickCED/dmx-brightsign
 
 ## Library API
+
 ```javascript
-const DMX = require('dmx')
+const DMX = require("dmx");
 ```
 
 ### Class DMX
@@ -21,7 +22,6 @@ Create a new DMX instance. This class is used to tie multiple universes together
 
 - <code>name</code> - String
 - <code>module</code> - Object implementing the Driver API
-
 
 Register a new DMX Driver module by its name.
 These drivers are currently registered by default:
@@ -52,7 +52,6 @@ For enttec-usb-dmx-pro and enttec-open-usb-dmx device_id is the path the the ser
 - <code>extraData</code> - Object, this data will be passed unmodified to the <code>update</code> Event. (Optional; default value is `{}`)
 
 Update one or multiple channels of a universe. Also emits a <code>update</code> Event with the same information.
-
 
 #### DMX.devices
 
@@ -123,14 +122,12 @@ The options Object takes an <code>easing</code> key which allows to set a easing
 
 Returns a Animation object with the animation step added.
 
-
 #### animation.delay(duration)
 
 - <code>duration</code> - Number, duration in ms
 
 Delay the next animation step for duration.
 Returns a Animation object with the delay step added.
-
 
 #### animation.run(universe, onFinish)
 
@@ -146,17 +143,26 @@ Run the Animation on the specified universe.
 Runs an animation constantly until <code>animation.stop()</code> is called
 
 The example below shows a value being animated for 5 seconds:
-```javascript
-const animation = new DMX.Animation().add({
-  1: 255,
-}, 100).add({
-  1: 0,
-}, 100).runLoop(universe)
 
+```javascript
+const animation = new DMX.Animation()
+  .add(
+    {
+      1: 255,
+    },
+    100
+  )
+  .add(
+    {
+      1: 0,
+    },
+    100
+  )
+  .runLoop(universe);
 
 setTimeout(() => {
-  animation.stop()
-}, 5000)
+  animation.stop();
+}, 5000);
 ```
 
 #### update Event

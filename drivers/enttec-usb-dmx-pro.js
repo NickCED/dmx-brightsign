@@ -1,6 +1,6 @@
-const SerialPort = require('serialport');
-const util = require('util');
-const EventEmitter = require('events').EventEmitter;
+const SerialPort = require("serialport");
+const util = require("util");
+const EventEmitter = require("events").EventEmitter;
 
 const ENTTEC_PRO_DMX_STARTCODE = 0x00;
 const ENTTEC_PRO_START_OF_MSG = 0x7e;
@@ -8,23 +8,38 @@ const ENTTEC_PRO_END_OF_MSG = 0xe7;
 const ENTTEC_PRO_SEND_DMX_RQ = 0x06;
 // var ENTTEC_PRO_RECV_DMX_PKT = 0x05;
 
+/**
+ * Creates an instance of EnttecUSBDMXPRO.
+ * @param {string} deviceId - The device ID for the DMX USB Pro device.
+ * @param {Object} options - Configuration options.
+ * @param {AltBindings} [options.altBindings] - Alternative bindings for SerialPort.
+ */
+
 function EnttecUSBDMXPRO(deviceId, options = {}) {
   this.universe = Buffer.alloc(513, 0);
   this.readyToWrite = true;
   this.interval = 1000 / (options.dmx_speed || 40);
 
-  this.dev = new SerialPort(deviceId, {
-    'baudRate': 250000,
-    'dataBits': 8,
-    'stopBits': 2,
-    'parity': 'none',
-  }, err => {
-    if (!err) {
-      this.start();
-    } else {
-      console.warn(err);
+  if (options.altBindings) {
+    SerialPort.Binding = options.altBindings;
+  }
+
+  this.dev = new SerialPort(
+    deviceId,
+    {
+      baudRate: 250000,
+      dataBits: 8,
+      stopBits: 2,
+      parity: "none",
+    },
+    (err) => {
+      if (!err) {
+        this.start();
+      } else {
+        console.warn(err);
+      }
     }
-  });
+  );
 }
 
 EnttecUSBDMXPRO.prototype.sendUniverse = function () {
@@ -36,8 +51,8 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function () {
     const hdr = Buffer.from([
       ENTTEC_PRO_START_OF_MSG,
       ENTTEC_PRO_SEND_DMX_RQ,
-      (this.universe.length) & 0xff,
-      ((this.universe.length) >> 8) & 0xff,
+      this.universe.length & 0xff,
+      (this.universe.length >> 8) & 0xff,
       ENTTEC_PRO_DMX_STARTCODE,
     ]);
 
@@ -56,7 +71,10 @@ EnttecUSBDMXPRO.prototype.sendUniverse = function () {
 };
 
 EnttecUSBDMXPRO.prototype.start = function () {
-  this.intervalhandle = setInterval(this.sendUniverse.bind(this), this.interval);
+  this.intervalhandle = setInterval(
+    this.sendUniverse.bind(this),
+    this.interval
+  );
 };
 
 EnttecUSBDMXPRO.prototype.stop = function () {
@@ -72,7 +90,7 @@ EnttecUSBDMXPRO.prototype.update = function (u, extraData) {
     this.universe[c] = u[c];
   }
 
-  this.emit('update', u, extraData);
+  this.emit("update", u, extraData);
 };
 
 EnttecUSBDMXPRO.prototype.updateAll = function (v) {
