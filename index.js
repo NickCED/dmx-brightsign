@@ -13,6 +13,7 @@ const EventEmitter = require("events");
 
 class DMX extends EventEmitter {
   constructor(options) {
+    super();
     const opt = options || {};
     const devices = opt.devices || {};
 
