@@ -18,8 +18,9 @@
     "light control"
   ],
   "dependencies": {
+    "@types/node": "^20.11.16",
     "sacn": "^3.2.1",
-    "serialport": "^8.0.7",
+    "serialport": "^12.0.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
