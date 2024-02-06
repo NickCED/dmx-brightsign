@@ -4,7 +4,6 @@ const EventEmitter = require("events");
  * DMX
  * @param {Object} options - Configuration options.
  * @param {Object} options.devices - Custom device definitions.
- * @param {any} options.altBindings - Custom bindings passed through for SerialPort.
  * @constructor
  * @emits update
  * @emits updateAll
@@ -41,6 +40,7 @@ class DMX extends EventEmitter {
   }
 
   addUniverse(name, driver, deviceId, options) {
+    console.log("Options : ", ...options);
     this.universes[name] = new this.drivers[driver](deviceId, options);
 
     this.universes[name].on("update", (channels, extraData) => {
